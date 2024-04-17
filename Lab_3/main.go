@@ -64,27 +64,30 @@ func main() {
 	B := 0.0
 	C := 0.0
 	D := 0.0
+
 	for i := 0; i < n-1; i++ {
-		A += math.Log(x[i]) * math.Log(x[i])
-		B += math.Log(x[i])
-		C += y[i] * math.Log(x[i])
-		D += y[i]
+		A += 1 / x[i]
+		B += 1 / math.Pow(x[i], 2)
+		C += 1 / y[i]
+		D += 1 / y[i] * (1 / x[i])
 	}
-	a := (C - D*B/float64(n)) / (A - B*B/float64(n))
-	b := (D - a*B) / float64(n)
+	b := (D - (C*A)/float64(n)) / (B - (A*A)/float64(n))
+	a := (C - b*A) / float64(n)
+	//a := (C - D*B/float64(n)) / (A - B*B/float64(n))
+	//b := (D - a*B) / float64(n)
 	fmt.Println("a = ", a)
 	fmt.Println("b = ", b)
 	var z [9]float64
 	for i, xx := range x {
-		// z6
+		// z7
 		z[i] = xx / (a*xx + b)
 	}
 	fmt.Println("z = ", z)
 	del := 0.0
 	for i := 0; i < n-1; i++ {
-		del += (z[i] - y[i]) * (z[i] - y[i]) / float64(n)
+		del += (z[i] - y[i]) * (z[i] - y[i])
 	}
-	del = math.Sqrt(del)
+	del = math.Sqrt(del / float64(n))
 	fmt.Println(" del = ", del)
 }
 
